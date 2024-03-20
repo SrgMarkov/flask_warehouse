@@ -32,5 +32,38 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/add_product', methods=['POST', 'GET'])
+def add_product():
+    if request.method == 'POST':
+        name = request.form['title']
+        description = request.form['description']
+        price = float(request.form['price'])
+        
+        product = Products(name=name, description=description, price=price)
+        try:
+            db.session.add(product)
+            db.session.commit()
+            return redirect('/')
+        except:
+            return 'Ошибка при добавлении продукта'
+    else:
+        return render_template('add_product.html')
+
+
+@app.route('/add_location', methods=['POST', 'GET'])
+def add_location():
+    if request.method == 'POST':
+        name = request.form['title']
+        product = Locations(name=name)
+        try:
+            db.session.add(product)
+            db.session.commit()
+            return redirect('/')
+        except:
+            return 'Ошибка при добавлении локации'
+    else:
+        return render_template('add_location.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
