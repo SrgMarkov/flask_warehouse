@@ -4,10 +4,94 @@
     title
 {% endblock %}
 
-{% block sheet %}
-  <div class="row mb-3 text-center">
-    <div class="col-4 themed-grid-col">.col-4</div>
-    <div class="col-4 themed-grid-col">.col-4</div>
-    <div class="col-4 themed-grid-col">.col-4</div>
+{% block body %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-lg-8 col-xl-7 col-xxl-6">
+      <h2 class="display-5 mb-6 aos-init aos-animate" data-aos="fade-down" data-aos-delay="0">
+            Товары на складе
+      </h2>
+    </div>
   </div>
+  <div class="row">
+    <div class="mb-10 col-12 aos-init aos-animate" data-aos="fade-down" data-aos-delay="250">
+      <div class="border-bottom border-bottom-dark-2 opacity-30">
+      </div>
+    </div>
+    <br>
+    <div class="mb-8 mb-md-0 col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="500">
+      <h5 class="mb-4">
+            Наименование
+      </h5>
+    </div>
+    <div class="mb-8 mb-md-0 col-sm-4 col-md-4 aos-init aos-animate" data-aos="fade-down" data-aos-delay="750">
+      <h5 class="mb-4">
+            Описание
+      </h5>
+    </div>
+    <div class="mb-8 mb-sm-0 col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1000">
+      <h5 class="mb-4">
+            Цена
+      </h5>
+    </div>
+    <div class="col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1250">
+      <h5 class="mb-4">
+            Локация
+      </h5>
+    </div>
+    <div class="col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1250">
+      <h5 class="mb-4">
+            Количество
+      </h5>
+    </div>
+  </div>
+  {% for product in products %}
+    <div class="row">
+      <div class="mb-10 col-12 aos-init aos-animate" data-aos="fade-down" data-aos-delay="250">
+        <div class="border-bottom border-bottom-dark-2 opacity-30">
+        </div>
+      </div>
+      <br>
+      <div class="mb-8 mb-md-0 col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="500">
+        <p class="mb-0">
+          {{ product.name }}
+        </p>
+      </div>
+      <div class="mb-8 mb-md-0 col-sm-4 col-md-4 aos-init aos-animate" data-aos="fade-down" data-aos-delay="750">
+        <p class="mb-0">
+          {{ product.description }}
+        </p>
+      </div>
+      <div class="mb-8 mb-sm-0 col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1000">
+        <p class="mb-0">
+          {{ product.price }}
+        </p>
+      </div>
+      <div class="col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1250">
+        <p class="mb-0">
+          {{ product.price }}
+        </p>
+      </div>
+      <div class="col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1250">
+        <p class="mb-0">
+          {{ product.price }}
+        </p>
+      </div>
+    </div>
+    <br>
+    <div class="row float-xxl-end m-xxl-7">
+      <div class="mb-10 col-12 aos-init aos-animate" data-aos="fade-down" data-aos-delay="250">
+        <a href="#" class="btn btn-sm btn-success m-xxl-2">
+          Добавить на склад
+        </a>
+        <a href="#" class="btn btn-sm btn-danger m-xxl-2">
+          Удалить со склада
+        </a>
+      </div>
+    </div>
+    <br>
+    <br>
+    <br>
+  {% endfor %}
+</div>
 {% endblock %}

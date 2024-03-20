@@ -7,23 +7,35 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-  <header class="p-3 text-bg-dark">
-    <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
-        </a>
-        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="/" class="nav-link px-2 text-secondary">Склад</a></li>
-          <li><a href="/add_product" class="nav-link px-2 text-white">Добавить товар</a></li>
-          <li><a href="/add_location" class="nav-link px-2 text-white">Добавить локацию</a></li>
-        </ul>
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-          <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search">
-        </form>
-      </div>
+    <div class="d-none d-lg-block">
+        <div class="container">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-3">
+                    <a href="/">
+                        <img src="static/wirehouse.png" alt="wirehouse" class="img-fluid me-6 aos-init aos-animate">						
+                    </a>
+                </div>
+                <div class="text-end col-6">
+                    <a href="/" class="fw-bold mx-4 text-dark-1 aos-init aos-animate" data-aos="fade-down" data-aos-delay="400">
+                                Склад
+                    </a>
+                    <a href="/add_product" class="fw-bold mx-4 text-dark-1 aos-init aos-animate" data-aos="fade-down" data-aos-delay="400">
+                                Добавить товар
+                    </a>
+                    <a href="/add_location" class="fw-bold mx-4 text-dark-1 aos-init aos-animate" data-aos="fade-down" data-aos-delay="400">
+                                Добавить локацию
+                    </a>
+                </div>
+                <div class="col-3">
+                    <form action="" method="GET">
+                        <div class="input-group aos-init aos-animate" data-aos="fade-down" data-aos-delay="650">
+                            <input type="search" name="query" placeholder="Найти товар" class="form-control border-start-0 border-dark-3 ps-1">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-  </header>
   {% block body %}{% endblock %}
 </body>
 </html>

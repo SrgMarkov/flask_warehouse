@@ -27,9 +27,10 @@ class Inventory(db.Model):
     quantity = db.Column(db.Integer)
 
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def index():
-    return render_template('index.html')
+    products = Products.query.order_by(Products.id).all()
+    return render_template('index.html', products=products)
 
 
 @app.route('/add_product', methods=['POST', 'GET'])
