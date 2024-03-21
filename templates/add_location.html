@@ -6,9 +6,12 @@
 
 {% block body %}
   <div class="container mt-5">
-    <h3>Добаление локации</h3>
+    <h3>Добавление локации</h3>
     <form method="post">
       <input type="text" name="title" id="title" class="form-control" placeholder="Введите название локации"><br>
+      {% if exist=='true' %}
+        <p>Такая локация уже существует</p>
+      {% endif %}
       <input type="submit" class="btn btn-success" value="Сохранить">
     </form>
   </div>
