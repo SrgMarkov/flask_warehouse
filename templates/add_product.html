@@ -6,11 +6,22 @@
 
 {% block body %}
   <div class="container mt-5">
-    <h3>Добаление товара</h3>
+    <h3>Добавление товара</h3>
     <form method="post">
-      <input type="text" name="title" id="title" class="form-control" placeholder="Введите название товара"><br>
-      <textarea name="description" id="description" class="form-control" placeholder="Введите описание товара"></textarea><br>
-      <input type="text" name="price" id="price" class="form-control" placeholder="Введите стоимость товара"><br>
+      <label for="title">Название товара</label>
+      <input type="text" name="title" id="title" class="form-control" placeholder="Введите название"><br>
+      <label for="description">Описание товара</label>
+      <textarea name="description" id="description" class="form-control" placeholder="Введите описание"></textarea><br>
+      <label for="price">Стоимость товара</label>
+      <input type="text" name="price" id="price" class="form-control" placeholder="Введите стоимость"><br>
+      <label for="location"> Выберите локацию</label>
+      <select name="location" id="location">
+        {% for location in locations %}
+          <option value="{{ location.name }}">{{ location.name }}</option>
+        {% endfor %}
+      </select><br><br>
+      <label for="quantity">Количество позиций товара</label>
+      <input type="text" name="quantity" id="quantity" class="form-control" placeholder="Введите количество позиций"><br>
       <input type="submit" class="btn btn-success" value="Сохранить">
     </form>
   </div>
