@@ -45,7 +45,7 @@
       </h5>
     </div>
   </div>
-  {% for product in products %}
+  {% for position in inventory %}
     <div class="row">
       <div class="mb-10 col-12 aos-init aos-animate" data-aos="fade-down" data-aos-delay="250">
         <div class="border-bottom border-bottom-dark-2 opacity-30">
@@ -54,27 +54,27 @@
       <br>
       <div class="mb-8 mb-md-0 col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="500">
         <p class="mb-0">
-          {{ product.name }}
+          {{ position.product.name }}
         </p>
       </div>
       <div class="mb-8 mb-md-0 col-sm-4 col-md-4 aos-init aos-animate" data-aos="fade-down" data-aos-delay="750">
         <p class="mb-0">
-          {{ product.description }}
+          {{ position.product.description }}
         </p>
       </div>
       <div class="mb-8 mb-sm-0 col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1000">
         <p class="mb-0">
-          {{ product.price }}
+          {{ position.product.price }}
         </p>
       </div>
       <div class="col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1250">
         <p class="mb-0">
-          {{ product.price }}
+          {{ position.location.name }}
         </p>
       </div>
       <div class="col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1250">
         <p class="mb-0">
-          {{ product.price }}
+          {{ position.quantity }}
         </p>
       </div>
     </div>

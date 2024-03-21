@@ -1,9 +1,8 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 
-
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///wirehouse.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///warehouse.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -13,11 +12,13 @@ class Products(db.Model):
     name = db.Column(db.String(50))
     description = db.Column(db.Text)
     price = db.Column(db.Float)
+    inventory = db.relationship('Inventory', backref='product', lazy='dynamic')
 
 
 class Locations(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
+    name = db.Column(db.String(50), )
+    inventory = db.relationship('Inventory', backref='location', lazy='dynamic')
 
 
 class Inventory(db.Model):
@@ -29,8 +30,11 @@ class Inventory(db.Model):
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-    products = Products.query.order_by(Products.id).all()
-    return render_template('index.html', products=products)
+    if request.method == 'POST':
+        pass
+    else:
+        inventory = Inventory.query.all()
+        return render_template('index.html', inventory=inventory)
 
 
 @app.route('/add_product', methods=['POST', 'GET'])
@@ -38,30 +42,39 @@ def add_product():
     if request.method == 'POST':
         name = request.form['title']
         description = request.form['description']
-        price = float(request.form['price'])
-        
+        price = request.form['price']
+        location = request.form['location']
+        quantity = request.form['quantity']
+
         product = Products(name=name, description=description, price=price)
-        try:
-            db.session.add(product)
-            db.session.commit()
-            return redirect('/')
-        except:
-            return 'Ошибка при добавлении продукта'
+        db.session.add(product)
+        db.session.commit()
+
+        inventory = Inventory(product_id=product.id,
+                              location_id=db.session.query(Locations).filter(Locations.name == location).first().id,
+                              quantity=quantity)
+        db.session.add(inventory)
+        db.session.commit()
+
+        return redirect('/')
     else:
-        return render_template('add_product.html')
+        locations = Locations.query.all()
+        return render_template('add_product.html', locations=locations)
 
 
 @app.route('/add_location', methods=['POST', 'GET'])
 def add_location():
     if request.method == 'POST':
         name = request.form['title']
-        product = Locations(name=name)
+        if db.session.query(Locations).filter(Locations.name == name).first():
+            return render_template('add_location.html', exist='true')
+        location = Locations(name=name)
         try:
-            db.session.add(product)
+            db.session.add(location)
             db.session.commit()
             return redirect('/')
-        except:
-            return 'Ошибка при добавлении локации'
+        except Exception as error:
+            return f'Ошибка при добавлении локации {error}'
     else:
         return render_template('add_location.html')
 
