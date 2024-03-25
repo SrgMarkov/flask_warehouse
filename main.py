@@ -98,6 +98,11 @@ def index():
             inventory = db.session.query(Inventory)\
                 .join(Products, Products.id == Inventory.product_id)\
                 .order_by(Products.price.desc()).all()
+        if 'location-button' in request.form:
+            location = request.form['location-button']
+            inventory = db.session.query(Inventory) \
+                .join(Locations, Locations.id == Inventory.location_id) \
+                .filter(Locations.name.contains(location))
     return render_template('index.html', inventory=inventory, locations=locations)
 
 
