@@ -34,11 +34,12 @@ class Inventory(db.Model):
 
 
 def add_product(form_data):
-    name = form_data['name']
+    name = form_data['name'].lower()
     description = form_data['description']
     price = form_data['price']
     location = form_data['product_location']
     quantity = form_data['quantity']
+    #TODO Add serializer for price and quantity
 
     product = Products(name=name, description=description, price=price)
     try:
@@ -70,6 +71,8 @@ def add_location(form_data):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    inventory = Inventory.query.all()
+    locations = Locations.query.all()
     if request.method == 'POST':
         print(request.form)
         if 'name' in request.form:
@@ -78,8 +81,11 @@ def index():
         if 'location' in request.form:
             add_location(request.form)
             return redirect('/')
-    inventory = Inventory.query.all()
-    locations = Locations.query.all()
+        if 'search' in request.form:
+            search = request.form['search'].lower()
+            inventory = db.session.query(Inventory)\
+                .join(Products, Products.id == Inventory.product_id)\
+                .filter(Products.name.contains(search))
     return render_template('index.html', inventory=inventory, locations=locations)
 
 
