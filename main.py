@@ -86,6 +86,11 @@ def index():
             inventory = db.session.query(Inventory)\
                 .join(Products, Products.id == Inventory.product_id)\
                 .filter(Products.name.contains(search))
+        if 'quantity_asc' in request.form:
+            inventory = Inventory.query.order_by(Inventory.quantity).all()
+        if 'quantity_desc' in request.form:
+            inventory = Inventory.query.order_by(Inventory.quantity.desc()).all()
+    print(inventory)
     return render_template('index.html', inventory=inventory, locations=locations)
 
 

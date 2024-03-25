@@ -26,14 +26,12 @@ $('.quantity_inner .bt_plus').click(function() {
     });
 });
 
-$('.quantity_inner .quantity').bind("change keyup input click", function() {
-    if (this.value.match(/[^0-9]/g)) {
-        this.value = this.value.replace(/[^0-9]/g, '');
-    }
-    if (this.value == "") {
-        this.value = 0;
-    }
-    if (this.value > parseInt($(this).data('max-count'))) {
-        this.value = parseInt($(this).data('max-count'));
-    }
+$('#quantity_asc').click(function() {
+	var id = $(this).attr("id");
+	$.ajax({
+        url: "/",
+        type: "POST",
+        contentType: "application/json",
+        data: {"id": id},
+    });
 });

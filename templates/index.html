@@ -32,10 +32,18 @@
             Локация
       </h5>
     </div>
-    <div class="col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1250">
+    <div class="col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1250" style="display: flex; justify-content: space-between">
+      <form method="post">
+        <input type="hidden" name="quantity_asc" id="quantity_asc" size="1" readonly>
+        <button type="submit" class="btn btn-default" style="padding-right: 0px; padding-left: 0px;">&#8595</button>
+      </form>
       <h5 class="mb-4">
-            Количество
+        Количество
       </h5>
+      <form method="post">
+        <input type="hidden" name="quantity_desc" id="quantity_desc" size="1" readonly>
+        <button type="submit" class="btn btn-default" style="padding-right: 0px; padding-left: 0px;">&#8593</button>
+      </form>
     </div>
   </div>
   {% for position in inventory %}
@@ -67,7 +75,7 @@
         <div class="quantity_inner">
           <form method="post">
             <button class="bt_minus" type="button" id="{{ position.id }}" name="minus">-</button>
-            <input type="text" name="quantity_update" id="quantity_update" value="{{ position.quantity }}" size="1" class="quantity"/>
+            <input type="text" name="quantity_update" id="quantity_update" value="{{ position.quantity }}" size="1" class="quantity" readonly>
             <button class="bt_plus" type="button" id="{{ position.id }}" name="plus">+</button>
           </form>
         </div>
