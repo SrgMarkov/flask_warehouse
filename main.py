@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -28,13 +28,29 @@ class Inventory(db.Model):
     quantity = db.Column(db.Integer)
 
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/', methods=['GET'])
 def index():
-    if request.method == 'POST':
-        pass
+    inventory = Inventory.query.all()
+    return render_template('index.html', inventory=inventory)
+
+
+@app.route('/add_count', methods=['POST'])
+def add_count():
+    position = db.session.query(Inventory).get(request.data.decode().split('=')[-1])
+    position.quantity += 1
+    db.session.commit()
+    return jsonify(result='Количество позиций товара увеличено на 1')
+
+
+@app.route('/delete_count', methods=['POST'])
+def delete_count():
+    position = db.session.query(Inventory).get(request.data.decode().split('=')[-1])
+    if position.quantity != 0:
+        position.quantity -= 1
+        db.session.commit()
+        return jsonify(result='Количество позиций товара уменьшено на 1')
     else:
-        inventory = Inventory.query.all()
-        return render_template('index.html', inventory=inventory)
+        return jsonify(result='Количество позиций не может быть меньше 0')
 
 
 @app.route('/add_product', methods=['POST', 'GET'])

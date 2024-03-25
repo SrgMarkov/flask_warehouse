@@ -68,29 +68,18 @@
         </p>
       </div>
       <div class="col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1250">
-        <p class="mb-0">
-          {{ position.location.name }}
-        </p>
+        <p class="quantity">{{ position.location.name }}</p>
       </div>
       <div class="col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1250">
-        <p class="mb-0">
-          {{ position.quantity }}
-        </p>
+        <div class="quantity_inner">
+          <form method="post">
+            <button class="bt_minus" type="button" id="{{ position.id }}" name="minus">-</button>
+            <input type="text" name="quantity_update" id="quantity_update" value="{{ position.quantity }}" size="1" class="quantity"/>
+            <button class="bt_plus" type="button" id="{{ position.id }}" name="plus">+</button>
+          </form>
+        </div>
       </div>
     </div>
-    <br>
-    <div class="row float-xxl-end m-xxl-7">
-      <div class="mb-10 col-12 aos-init aos-animate" data-aos="fade-down" data-aos-delay="250">
-        <a href="#" class="btn btn-sm btn-success m-xxl-2">
-          Добавить на склад
-        </a>
-        <a href="#" class="btn btn-sm btn-danger m-xxl-2">
-          Удалить со склада
-        </a>
-      </div>
-    </div>
-    <br>
-    <br>
     <br>
   {% endfor %}
 </div>
