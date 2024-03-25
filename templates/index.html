@@ -18,21 +18,29 @@
       </h5>
     </div>
     <div class="mb-8 mb-md-0 col-sm-4 col-md-4 aos-init aos-animate" data-aos="fade-down" data-aos-delay="750">
-      <h5 class="mb-4">
+      <h5 class="mb-4" style="text-align: center">
             Описание
       </h5>
     </div>
-    <div class="mb-8 mb-sm-0 col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1000">
+    <div class="mb-8 mb-sm-0 col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1000" style="display: flex; align-items: baseline; text-align: left">
+      <form method="post">
+        <input type="hidden" name="price_asc" id="quantity_asc" size="1" readonly>
+        <button type="submit" class="btn btn-default" style="padding-right: 0px; padding-left: 0px;">&#8595</button>
+      </form>
       <h5 class="mb-4">
-            Цена
+        Цена
       </h5>
+      <form method="post">
+        <input type="hidden" name="price_desc" id="quantity_desc" size="1" readonly>
+        <button type="submit" class="btn btn-default" style="padding-right: 0px; padding-left: 0px;">&#8593</button>
+      </form>
     </div>
     <div class="col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1250">
       <h5 class="mb-4">
             Локация
       </h5>
     </div>
-    <div class="col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1250" style="display: flex; justify-content: space-between">
+    <div class="col-sm-2 col-md-2 aos-init aos-animate" data-aos="fade-down" data-aos-delay="1250" style="display: flex; justify-content: space-evenly;; align-items: baseline;">
       <form method="post">
         <input type="hidden" name="quantity_asc" id="quantity_asc" size="1" readonly>
         <button type="submit" class="btn btn-default" style="padding-right: 0px; padding-left: 0px;">&#8595</button>
