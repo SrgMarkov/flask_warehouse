@@ -1,5 +1,10 @@
+import logging
+
 from flask import Flask, render_template, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
+
+
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///warehouse.db'
@@ -28,10 +33,54 @@ class Inventory(db.Model):
     quantity = db.Column(db.Integer)
 
 
-@app.route('/', methods=['GET'])
+def add_product(form_data):
+    name = form_data['name']
+    description = form_data['description']
+    price = form_data['price']
+    location = form_data['product_location']
+    quantity = form_data['quantity']
+
+    product = Products(name=name, description=description, price=price)
+    try:
+        db.session.add(product)
+        db.session.commit()
+    except Exception as error:
+         logger.error(f'Ошибка при добавлении продукта - {error}')
+
+    inventory = Inventory(product_id=product.id,
+                          location_id=db.session.query(Locations).filter(Locations.name == location).first().id,
+                          quantity=quantity)
+    try:
+        db.session.add(inventory)
+        db.session.commit()
+    except Exception as error:
+        logger.error(f'Ошибка при добавлении инвентаря -  {error}')
+
+
+def add_location(form_data):
+    name = form_data['location']
+    if not db.session.query(Locations).filter(Locations.name == name).first():
+        location = Locations(name=name)
+        try:
+            db.session.add(location)
+            db.session.commit()
+        except Exception as error:
+            logger.error(f'Ошибка при добавлении локации {error}')
+
+
+@app.route('/', methods=['GET', 'POST'])
 def index():
+    if request.method == 'POST':
+        print(request.form)
+        if 'name' in request.form:
+            add_product(request.form)
+            return redirect('/')
+        if 'location' in request.form:
+            add_location(request.form)
+            return redirect('/')
     inventory = Inventory.query.all()
-    return render_template('index.html', inventory=inventory)
+    locations = Locations.query.all()
+    return render_template('index.html', inventory=inventory, locations=locations)
 
 
 @app.route('/add_count', methods=['POST'])
@@ -53,47 +102,7 @@ def delete_count():
         return jsonify(result='Количество позиций не может быть меньше 0')
 
 
-@app.route('/add_product', methods=['POST', 'GET'])
-def add_product():
-    if request.method == 'POST':
-        name = request.form['title']
-        description = request.form['description']
-        price = request.form['price']
-        location = request.form['location']
-        quantity = request.form['quantity']
-
-        product = Products(name=name, description=description, price=price)
-        db.session.add(product)
-        db.session.commit()
-
-        inventory = Inventory(product_id=product.id,
-                              location_id=db.session.query(Locations).filter(Locations.name == location).first().id,
-                              quantity=quantity)
-        db.session.add(inventory)
-        db.session.commit()
-
-        return redirect('/')
-    else:
-        locations = Locations.query.all()
-        return render_template('add_product.html', locations=locations)
-
-
-@app.route('/add_location', methods=['POST', 'GET'])
-def add_location():
-    if request.method == 'POST':
-        name = request.form['title']
-        if db.session.query(Locations).filter(Locations.name == name).first():
-            return render_template('add_location.html', exist='true')
-        location = Locations(name=name)
-        try:
-            db.session.add(location)
-            db.session.commit()
-            return redirect('/')
-        except Exception as error:
-            return f'Ошибка при добавлении локации {error}'
-    else:
-        return render_template('add_location.html')
-
-
 if __name__ == '__main__':
+    logging.basicConfig(format="%(process)d %(levelname)s %(message)s")
+    logger.setLevel(logging.ERROR)
     app.run(debug=True)
