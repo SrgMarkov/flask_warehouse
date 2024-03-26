@@ -1,13 +1,16 @@
 import logging
+import os
 
+from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 
 logger = logging.getLogger(__name__)
 
+load_dotenv()
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///warehouse.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -33,12 +36,25 @@ class Inventory(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
 
 
+def check_values(to_int_value, to_float_value):
+    try:
+        int(to_int_value)
+        float(to_float_value)
+        return True
+    except Exception as error:
+        logger.error(f'Не допустимое значение в строке - {error}')
+        return False
+
+
 def add_product(form_data):
     name = form_data['name'].lower()
     description = form_data['description']
     price = form_data['price']
     location = form_data['product_location']
     quantity = form_data['quantity']
+
+    if not check_values(quantity, price):
+        return None
 
     product = Products(name=name, description=description, price=price)
     try:
@@ -73,7 +89,6 @@ def index():
     inventory = Inventory.query.all()
     locations = Locations.query.all()
     if request.method == 'POST':
-        print(request.form)
         if 'name' in request.form:
             add_product(request.form)
             return redirect('/')
@@ -108,20 +123,23 @@ def index():
 @app.route('/add_count', methods=['POST'])
 def add_count():
     position = db.session.query(Inventory).get_or_404(request.data.decode().split('=')[-1])
-    position.quantity += 1
-    db.session.commit()
-    return jsonify(result='Количество позиций товара увеличено на 1')
+    try:
+        position.quantity += 1
+        db.session.commit()
+        return jsonify(result='Количество позиций товара увеличено на 1')
+    except Exception as error:
+        logger.error(f'Ошибка при обновлении количества - {error}')
 
 
 @app.route('/delete_count', methods=['POST'])
 def delete_count():
     position = db.session.query(Inventory).get_or_404(request.data.decode().split('=')[-1])
-    if position.quantity != 0:
+    try:
         position.quantity -= 1
         db.session.commit()
         return jsonify(result='Количество позиций товара уменьшено на 1')
-    else:
-        return jsonify(result='Количество позиций не может быть меньше 0')
+    except Exception as error:
+        logger.error(f'Ошибка при обновлении количества - {error}')
 
 
 @app.route('/delete_product', methods=['POST'])
@@ -136,6 +154,6 @@ def delete_product():
 
 
 if __name__ == '__main__':
-    logging.basicConfig(format="%(process)d %(levelname)s %(message)s")
-    logger.setLevel(logging.ERROR)
-    app.run(debug=True)
+    logging.basicConfig(format='%(process)d %(levelname)s %(message)s')
+    logger.setLevel(logging.INFO)
+    app.run(debug=False)
