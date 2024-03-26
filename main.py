@@ -14,15 +14,15 @@ db = SQLAlchemy(app)
 
 class Products(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
+    name = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text)
-    price = db.Column(db.Float)
-    inventory = db.relationship('Inventory', backref='product', lazy='dynamic')
+    price = db.Column(db.Float, nullable=False)
+    inventory = db.relationship('Inventory', backref='product', lazy='dynamic', cascade="all,delete")
 
 
 class Locations(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), )
+    name = db.Column(db.String(50), nullable=False)
     inventory = db.relationship('Inventory', backref='location', lazy='dynamic')
 
 
@@ -30,7 +30,7 @@ class Inventory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     location_id = db.Column(db.Integer, db.ForeignKey('locations.id'))
-    quantity = db.Column(db.Integer)
+    quantity = db.Column(db.Integer, nullable=False)
 
 
 def add_product(form_data):
@@ -39,7 +39,6 @@ def add_product(form_data):
     price = form_data['price']
     location = form_data['product_location']
     quantity = form_data['quantity']
-    #TODO Add serializer for price and quantity
 
     product = Products(name=name, description=description, price=price)
     try:
@@ -108,7 +107,7 @@ def index():
 
 @app.route('/add_count', methods=['POST'])
 def add_count():
-    position = db.session.query(Inventory).get(request.data.decode().split('=')[-1])
+    position = db.session.query(Inventory).get_or_404(request.data.decode().split('=')[-1])
     position.quantity += 1
     db.session.commit()
     return jsonify(result='Количество позиций товара увеличено на 1')
@@ -116,13 +115,24 @@ def add_count():
 
 @app.route('/delete_count', methods=['POST'])
 def delete_count():
-    position = db.session.query(Inventory).get(request.data.decode().split('=')[-1])
+    position = db.session.query(Inventory).get_or_404(request.data.decode().split('=')[-1])
     if position.quantity != 0:
         position.quantity -= 1
         db.session.commit()
         return jsonify(result='Количество позиций товара уменьшено на 1')
     else:
         return jsonify(result='Количество позиций не может быть меньше 0')
+
+
+@app.route('/delete_product', methods=['POST'])
+def delete_product():
+    position = db.session.query(Inventory).get_or_404(request.data.decode().split('=')[-1])
+    try:
+        db.session.delete(position)
+        db.session.commit()
+        return jsonify(result='deleted')
+    except Exception as error:
+        logger.error(f'Ошибка при удалении товара {error}')
 
 
 if __name__ == '__main__':

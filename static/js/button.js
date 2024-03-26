@@ -25,3 +25,14 @@ $('.quantity_inner .bt_plus').click(function() {
         data: {"id": id},
     });
 });
+
+$('.quantity_inner .bt_delete').click(function() {
+	let id = $(this).attr("id");
+	$.ajax({
+        url: "/delete_product",
+        type: "POST",
+        contentType: "application/json",
+        data: {"id": id},
+    });
+    location.reload()
+});
