@@ -15,7 +15,7 @@ pip install -r requirements.txt
 
 Необходимо подготовить базу данных Mysql, прописать данные в файле `.env` в виде
 ```text
-DATABASE=e.g mysql://{db_login}:{db_password}@{db_host}:{db_port}/{db_name}
+DATABASE=mysql+pymysql://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}
 ```
 для запуска в `dev` режиме выполнить команду
 ```
@@ -31,7 +31,7 @@ gunicorn -b :8080 app:app
 Основа jquery кода для клавиш "+" и "-" взят с сайта [atuin.ru](https://atuin.ru/blog/plyus-i-minus-dlya-polya-input/) с добавлением ajax, кнопка удаления товара написана на подобии
 
 ### Docker
-Подготовлен Dockerfile для быстрого опубликования в `prod`. Подробнее о работе с docker можно посмотреть в [docker tutorial](https://docs.docker.com/get-started/)
+Подготовлен Dockerfile для быстрого опубликования в `prod`
 
 ### Пример работы приложения
 Посмотреть пример работы приложения можно по [ссылке](http://95.163.242.132)
